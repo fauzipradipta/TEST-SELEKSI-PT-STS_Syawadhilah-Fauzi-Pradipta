@@ -89,12 +89,16 @@ import RegisterPage from "./pages/register/RegisterPage";
 // };
 
 const App = () => {
-
+// const theme = useAppSelector((state) => state.theme);
   return(
     <React.Fragment>
-      <div className="wrapper">
+      {/* <div className="wrapper"> */}
+       <Sidebar />
+       <div className="container">
         <RegisterPage />
-      </div>
+       </div>
+        
+      {/* </div> */}
       
     </React.Fragment>
   )
