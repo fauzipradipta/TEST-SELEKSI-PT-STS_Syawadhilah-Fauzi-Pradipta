@@ -92,14 +92,10 @@ const App = () => {
 
   return(
     <React.Fragment>
-      <div>
+      <div className="wrapper">
         <RegisterPage />
       </div>
-      <div
-        id="sidebar-overlay"
-        role="presentation"
-      />
-      {/* <LoadingContent loading={false} /> */}
+      
     </React.Fragment>
   )
 }
