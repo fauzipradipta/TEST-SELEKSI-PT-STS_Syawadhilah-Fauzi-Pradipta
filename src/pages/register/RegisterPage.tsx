@@ -103,7 +103,7 @@ const RegisterPage = () => {
           {kelurahanList.map(item => <option key={item.id} value={item.id}>{item.nama}</option>)}
         </select>
       </div>
-      <button type="submit" className="bg-blue text-white px-4 py-2 rounded">Daftar</button>
+      <button type="submit" className="button">Register</button>
     </form>
 )
 }
