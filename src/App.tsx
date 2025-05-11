@@ -1,107 +1,35 @@
-import { Content, Footer, Header, Sidebar } from "./components";
-import {
-  addWindowClass,
-  calculateWindowSize, // Assuming this is expensive
-  removeWindowClass,
-  useWindowSize,
-  useDispatch,
-  useEffect,
-  LoadingContent,
-} from "./utils";
-import {
-  AppDispatch,
-  themesActions,
-  useAppSelector,
-  utilityActions,
-} from "./reduxStore";
-import React, { useMemo } from "react";
-import RegisterPage from "./pages/register/RegisterPage";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-// const App = () => {
-//   const theme = useAppSelector((state) => state.theme);
-//   const utility = useAppSelector((state) => state.utility);
+function App() {
+  const [count, setCount] = useState(0)
 
-//   const dispatch = useDispatch<AppDispatch>();
-//   const windowSize = useWindowSize();
-
-//   const memoizedWindowSize = useMemo(
-//     () => calculateWindowSize(windowSize.width),
-//     [windowSize.width]
-//   );
-
-//   const handleToggleMenuSidebar = () => {
-//     dispatch(themesActions.setSidebarToggle(!theme.getSidebarToggle));
-//   };
-
-//   useEffect(() => {
-//     removeWindowClass("sidebar-closed");
-//     removeWindowClass("sidebar-collapse");
-//     removeWindowClass("sidebar-open");
-
-//     // Use the memoized window size
-//     const size = memoizedWindowSize;
-
-//     if (utility.getScreenSize !== size) {
-//       dispatch(utilityActions.setScreenSize(size));
-//     }
-
-//     if (theme.getSidebarToggle && utility.getScreenSize === "lg") {
-//       addWindowClass("sidebar-collapse");
-//     } else if (theme.getSidebarToggle && utility.getScreenSize === "xs") {
-//       addWindowClass("sidebar-open");
-//     } else if (!theme.getSidebarToggle && utility.getScreenSize !== "lg") {
-//       addWindowClass("sidebar-closed");
-//       addWindowClass("sidebar-collapse");
-//     }
-//   }, [
-//     dispatch,
-//     memoizedWindowSize,
-//     theme.getSidebarToggle,
-//     utility.getScreenSize,
-//   ]);
-
-//   return (
-//     <React.Fragment>
-//       <div >
-//        {utility.getIsLogin ? (
-//         <>
-//             {theme.handleSetPageHeader && <Header />}
-//             {theme.handleSetPageSidebar && <Sidebar />}
-//             <Content />
-//             {theme.handleSetFooter && <Footer />}
-//           </>
-//         ) : (
-//           <Content />
-//         )} 
-
-//         <RegisterPage/>
-
-//       </div>
-
-//       <div
-//         id="sidebar-overlay"
-//         role="presentation"
-//         onClick={() => handleToggleMenuSidebar()}
-//       />
-//       <LoadingContent loading={utility.getLoading.screen} />
-//     </React.Fragment>
-//   );
-// };
-
-const App = () => {
-// const theme = useAppSelector((state) => state.theme);
-  return(
-    <React.Fragment>
-      {/* <div className="wrapper"> */}
-       <Sidebar />
-       <div className="container">
-        <RegisterPage />
-       </div>
-        
-      {/* </div> */}
-      
-    </React.Fragment>
+  return (
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
   )
 }
 
-export default App;
+export default App
