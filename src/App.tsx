@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import RegisterPage from './pages/register/RegisterPage'
 // import UserManagement from './pages/Penduduk/UserManagementPage'
 import Sidebar from './component/Sidebar'
 import Dashboard from './pages/dashboard/Dashboard'
+import { UserManagement } from './pages/user management/UserManagement'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -12,11 +12,10 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/ " element={<RegisterPage/>} />
-          
           <Route element={<Sidebar />}>
+            <Route path="/" element={<UserManagement/>} />
             <Route path="/dashboard" element={<Dashboard />} />
-            {/* <Route path="/management" element={<UserManagement/>} /> */}
+           
           </Route>
         </Routes>
       </Router>

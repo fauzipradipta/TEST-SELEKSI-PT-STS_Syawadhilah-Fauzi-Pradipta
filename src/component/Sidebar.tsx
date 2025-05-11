@@ -25,10 +25,10 @@ const location = useLocation()
                     Dashboard
                 </Link>
                 <Link
-                    to="/management"
-                    className={`sidebar-link ${location.pathname === '/management' ? 'active' : ''}`}
+                    to="/"
+                    className={`sidebar-link ${location.pathname === '/' ? 'active' : ''}`}
                 >
-                    Penduduk
+                    User Management
                 </Link>
                 </nav>
             </aside>
