@@ -45,7 +45,7 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await axios.post('/api/anggota', {
+    await axios.post('/api/Penduduk', {
       nik,
       nama,
       noHp,

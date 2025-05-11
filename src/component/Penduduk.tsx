@@ -1,8 +1,8 @@
 import React,{useState,useEffect} from "react";
 import axios from "axios";
-import "../../styles/UserManagement.css";
+import "../styles/Penduduk.css";
 
-interface Anggota {
+interface Penduduk {
   id: number
   nik: string
   nama: string
@@ -13,17 +13,17 @@ interface Anggota {
   kelurahan: string
 }
 
-const UserManagement = () => {
-  const [anggotaList, setAnggotaList] = useState<Anggota[]>([])
+const PendudukComponent = () => {
+  const [PendudukList, setPendudukList] = useState<Penduduk[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
   useEffect(() => {
-    fetchAnggota()
+    fetchPenduduk()
   }, [])
 
-  const fetchAnggota = async () => {
-    const dummyData: Anggota[] = [
+  const fetchPenduduk = async () => {
+    const dummyData: Penduduk[] = [
       {
         id: 1,
         nik: '1234567890',
@@ -85,26 +85,26 @@ const UserManagement = () => {
         kelurahan: 'Cipinang',
       },
     ]
-    setAnggotaList(dummyData)
+    setPendudukList(dummyData)
   }
 
   const handleDelete = async (id: number) => {
-    if (confirm('Yakin ingin menghapus anggota ini?')) {
-      setAnggotaList(prev => prev.filter(anggota => anggota.id !== id))
+    if (confirm('Yakin ingin menghapus Penduduk ini?')) {
+      setPendudukList(prev => prev.filter(Penduduk => Penduduk.id !== id))
     }
   }
 
   const indexOfLastItem = currentPage * itemsPerPage
   const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItems = anggotaList.slice(indexOfFirstItem, indexOfLastItem)
-  const totalPages = Math.ceil(anggotaList.length / itemsPerPage)
+  const currentItems = PendudukList.slice(indexOfFirstItem, indexOfLastItem)
+  const totalPages = Math.ceil(PendudukList.length / itemsPerPage)
 
   return (
-    <div className="user-management-container">
-      <h2 className="user-management-title">Manajemen Anggota</h2>
-      <table className="anggota-table">
+    <div className="Penduduk-container">
+      <h2 className="Penduduk-title">Manajemen Penduduk</h2>
+      <table className="Penduduk-table">
         <thead>
-          <tr className="anggota-table-header">
+          <tr className="Penduduk-table-header">
             <th>NIK</th>
             <th>Nama</th>
             <th>No. HP</th>
@@ -116,20 +116,20 @@ const UserManagement = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(anggota => (
-            <tr key={anggota.id}>
-              <td>{anggota.nik}</td>
-              <td>{anggota.nama}</td>
-              <td>{anggota.noHp}</td>
-              <td>{anggota.provinsi}</td>
-              <td>{anggota.kabupaten}</td>
-              <td>{anggota.kecamatan}</td>
-              <td>{anggota.kelurahan}</td>
+          {currentItems.map(Penduduk => (
+            <tr key={Penduduk.id}>
+              <td>{Penduduk.nik}</td>
+              <td>{Penduduk.nama}</td>
+              <td>{Penduduk.noHp}</td>
+              <td>{Penduduk.provinsi}</td>
+              <td>{Penduduk.kabupaten}</td>
+              <td>{Penduduk.kecamatan}</td>
+              <td>{Penduduk.kelurahan}</td>
               <td>
-                <button onClick={() => handleDelete(anggota.id)} className="button">
+                <button onClick={() => handleDelete(Penduduk.id)} className="button">
                   Update
                 </button>
-                <button onClick={() => handleDelete(anggota.id)} className="delete-button">
+                <button onClick={() => handleDelete(Penduduk.id)} className="delete-button">
                   Delete
                 </button>
               </td>
@@ -158,4 +158,4 @@ const UserManagement = () => {
   )
 }
 
-export default UserManagement;
+export default PendudukComponent;

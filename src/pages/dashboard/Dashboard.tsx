@@ -10,11 +10,12 @@ import {
   Legend,
 } from 'chart.js'
 import '../../styles/Dashboard.css'
+import Penduduk from '../../component/Penduduk'
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
 const Dashboard = () => {
   const [totalHariIni, setTotalHariIni] = useState(30)
-  const [totalAnggota, setTotalAnggota] = useState(200)
+  const [totalPenduduk, setTotalPenduduk] = useState(200)
   const [chartData, setChartData] = useState<number[]>([2, 5, 3, 8, 6, 9])
   const [chartLabels, setChartLabels] = useState<string[]>([
     '10:00',
@@ -56,8 +57,8 @@ const Dashboard = () => {
           <h3 className="dashboard-card-value">{totalHariIni}</h3>
         </div>
         <div className="dashboard-card">
-          <p className="dashboard-card-label">Total Anggota</p>
-          <h3 className="dashboard-card-value">{totalAnggota}</h3>
+          <p className="dashboard-card-label">Total Penduduk</p>
+          <h3 className="dashboard-card-value">{totalPenduduk}</h3>
         </div>
       </div>
 
@@ -65,6 +66,11 @@ const Dashboard = () => {
         <h4 className="dashboard-chart-title">Grafik Pendaftaran (30 menit terakhir)</h4>
         <Line data={data} options={options} />
       </div>
+
+      <div className='dashboard-penduduk'>
+        <Penduduk/>
+      </div>
+      
     </div>
   )
 }

@@ -28,7 +28,7 @@ const location = useLocation()
                     to="/management"
                     className={`sidebar-link ${location.pathname === '/management' ? 'active' : ''}`}
                 >
-                    User Management
+                    Penduduk
                 </Link>
                 </nav>
             </aside>

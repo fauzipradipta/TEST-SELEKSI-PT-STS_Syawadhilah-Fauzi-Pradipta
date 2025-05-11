@@ -6,32 +6,31 @@
     border-color: white;
 }
 
-.user-management-container {
+Penduduk-container {
   padding: 2rem;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border-radius: 0.5rem;
+  width: 100%;
+  
 }
 
-.user-management-title {
+Penduduk-title {
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
 
-.anggota-table {
+.Penduduk-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.anggota-table th,
-.anggota-table td {
+.Penduduk-table th,
+.Penduduk-table td {
   border: 1px solid #ccc;
   padding: 0.5rem;
   text-align: left;
 }
 
-.anggota-table-header {
+.Penduduk-table-header {
   background-color: #f3f4f6;
 }
 
