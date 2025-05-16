@@ -1,0 +1,84 @@
+.layout-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 16rem;
+  background-color: #1f2937;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  transition: width 0.3s ease;
+  /* overflow: hidden; */
+}
+
+.sidebar-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+.sidebar.collapsed {
+  width: 4rem;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  white-space: nowrap;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  align-self: flex-end;
+  position: absolute; /* Position the toggle button */
+   right: 0.5rem; /* Adjust this value to ensure visibility */
+  z-index: 1; /* Ensure the toggle button is on top */
+  
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-link {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-link:hover {
+  background-color: #374151;
+}
+
+.sidebar-link.active {
+  background-color: #374151;
+}
+.sidebar.collapsed .sidebar-title {
+  opacity: 0; /* Hide the title when the sidebar is collapsed */
+}
+.main-content {
+  margin-left: 16rem;
+  flex: 1;
+  background-color: #f3f4f6;
+  overflow: auto;
+  transition: margin-left 0.3s ease;
+} 
