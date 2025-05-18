@@ -4,6 +4,7 @@ import './App.css'
 import Sidebar from './component/Sidebar'
 import Dashboard from './pages/dashboard/Dashboard'
 import { UserManagement } from './pages/user management/UserManagement'
+import Register from './pages/register/RegisterPage'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -15,6 +16,7 @@ function App() {
           <Route element={<Sidebar />}>
             <Route path="/" element={<UserManagement/>} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path ="/register" element={<Register/>} />
            
           </Route>
         </Routes>
