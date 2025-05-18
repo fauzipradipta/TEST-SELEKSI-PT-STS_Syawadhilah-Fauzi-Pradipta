@@ -26,9 +26,15 @@ const location = useLocation()
                 </Link>
                 <Link
                     to="/"
-                    className={`sidebar-link ${location.pathname === '/' ? 'active' : ''}`}
+                    className={`sidebar-link ${location.pathname === '/user-management' ? 'active' : ''}`}
                 >
                     User Management
+                </Link>
+                <Link
+                    to="/register"
+                    className={`sidebar-link ${location.pathname === '/register' ? 'active' : ''}`}
+                >
+                    Register
                 </Link>
                 </nav>
             </aside>
