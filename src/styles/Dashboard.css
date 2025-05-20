@@ -1,53 +1,88 @@
 .dashboard-container {
-  padding: 1rem;
-  background-color: #f3f4f6;
+  padding: 2rem;
 }
 
-.dashboard-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
 }
 
-.dashboard-cards {
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chart-container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container h2 {
   margin-bottom: 1rem;
+  color: #555;
 }
 
-.dashboard-card {
-  background-color: white;
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.error {
+  color: #e74c3c;
   padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #fadbd8;
+  border-radius: 4px;
+  text-align: center;
+  margin: 2rem;
 }
 
-.dashboard-card-label {
-  color: #4b5563;
+.stats-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.dashboard-card-value {
-  font-size: 1.875rem;
-  font-weight: bold;
+.stats-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f7ff;
+  border-radius: 50%;
 }
 
-.dashboard-chart {
-  background-color: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.stats-content {
+  flex: 1;
 }
 
-.dashboard-chart-title {
-  font-weight: 600;
+.stats-title {
+  font-size: 1rem;
+  color: #666;
   margin-bottom: 0.5rem;
 }
 
-.dashboard-penduduk{
-  background-color: white;
-  padding: 1rem;
+.stats-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.chart-wrapper {
   margin-top: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: 300px;
 }

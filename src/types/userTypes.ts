@@ -20,4 +20,3 @@ export interface UserFormData {
   level: string;
   wilayah: string;
 }
-

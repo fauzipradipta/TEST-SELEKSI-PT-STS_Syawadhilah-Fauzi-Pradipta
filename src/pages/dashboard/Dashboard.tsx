@@ -1,78 +1,66 @@
-import React, {  useState } from 'react'
-import { Line } from 'react-chartjs-2'
-import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-} from 'chart.js'
-import '../../styles/Dashboard.css'
-import Penduduk from '../../component/Penduduk'
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
+import { useEffect, useState } from 'react';
+import { getDashboardStats } from '../../service/memberApi';
+import StatsCard from '../../component/StatsCard';
+import RegistrationChart from '../../component/RegistrationCard';
+import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
-  const [totalHariIni, setTotalHariIni] = useState(30)
-  const [totalPenduduk, setTotalPenduduk] = useState(200)
-  const [chartData, setChartData] = useState<number[]>([2, 5, 3, 8, 6, 9])
-  const [chartLabels, setChartLabels] = useState<string[]>([
-    '10:00',
-    '10:05',
-    '10:10',
-    '10:15',
-    '10:20',
-    '10:25',
-    '10:30',
-  ])
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const data = {
-    labels: chartLabels,
-    datasets: [
-      {
-        label: 'Pendaftaran per 5 menit',
-        data: chartData,
-        borderColor: 'blue',
-        backgroundColor: 'rgba(0, 123, 255, 0.3)',
-        fill: true,
-      },
-    ],
-  }
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('No authentication token found');
+        }
+        
+        const data = await getDashboardStats(token);
+        setStats(data);
+      } catch (err) {
+        setError('Failed to load dashboard data');
+        console.error('Dashboard error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' as const },
-    },
-  }
+    fetchStats();
+  }, []);
+
+  if (loading) return <div className="loading">Loading dashboard...</div>;
+  if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="dashboard-container">
-      <h2 className="dashboard-title">Dashboard</h2>
-
-      <div className="dashboard-cards">
-        <div className="dashboard-card">
-          <p className="dashboard-card-label">Total Hari Ini</p>
-          <h3 className="dashboard-card-value">{totalHariIni}</h3>
-        </div>
-        <div className="dashboard-card">
-          <p className="dashboard-card-label">Total Penduduk</p>
-          <h3 className="dashboard-card-value">{totalPenduduk}</h3>
-        </div>
-      </div>
-
-      <div className="dashboard-chart">
-        <h4 className="dashboard-chart-title">Grafik Pendaftaran (30 menit terakhir)</h4>
-        <Line data={data} options={options} />
-      </div>
-
-      <div className='dashboard-penduduk'>
-        <Penduduk/>
+      <h1 className="page-title">Dashboard Overview</h1>
+      
+      <div className="stats-grid">
+        <StatsCard 
+          title="Total Members" 
+          value={stats?.totalMembers} 
+          icon="👥"
+        />
+        <StatsCard 
+          title="Today's Registrations" 
+          value={stats?.todaysRegistrations} 
+          icon="📅"
+        />
+        <StatsCard 
+          title="Active Regions" 
+          value="5" 
+          icon="🌏"
+        />
       </div>
       
+      <div className="chart-container">
+        <h2>Recent Registrations</h2>
+        <RegistrationChart data={stats?.chartData} />
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Dashboard;
