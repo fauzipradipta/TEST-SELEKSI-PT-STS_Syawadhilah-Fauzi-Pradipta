@@ -25,7 +25,7 @@ const location = useLocation()
                     Dashboard
                 </Link>
                 <Link
-                    to="/"
+                    to="/user-management"
                     className={`sidebar-link ${location.pathname === '/user-management' ? 'active' : ''}`}
                 >
                     User Management
