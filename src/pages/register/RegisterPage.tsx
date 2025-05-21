@@ -1,298 +1,211 @@
 import { useState,useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { registerMember } from '../../service/memberApi';
-import { Region } from '../../types/region'; 
+// import { Region } from '../../types/region'; 
 import '../../styles/Register.css';
+
 
 const RegisterMember = () => {
   const [formData, setFormData] = useState({
     nik: '',
     name: '',
     phone: '',
-    provinceId: 0,
-    regencyId: 0,
-    districtId: 0,
-    villageId: 0
+    province: '',
+    regency: '',
+    district: '',
+    village: ''
   });
-  const [provinces, setProvinces] = useState<Region[]>([]);
-  const [regencies, setRegencies] = useState<Region[]>([]);
-  const [districts, setDistricts] = useState<Region[]>([]);
-  const [villages, setVillages] = useState<Region[]>([]);
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    // Fetch provinces on component mount
-    const fetchProvinces = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) throw new Error('No authentication token found');
-        
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/regions?level=PROVINSI`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        const data = await response.json();
-        setProvinces(data);
-      } catch (err) {
-        console.error('Error fetching provinces:', err);
-      }
-    };
-
-    fetchProvinces();
-  }, []);
-
-  useEffect(() => {
-    // Fetch regencies when province is selected
-    if (formData.provinceId > 0) {
-      const fetchRegencies = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) throw new Error('No authentication token found');
-          
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/regions?parentId=${formData.provinceId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
-          const data = await response.json();
-          setRegencies(data);
-          setFormData(prev => ({ ...prev, regencyId: 0, districtId: 0, villageId: 0 }));
-        } catch (err) {
-          console.error('Error fetching regencies:', err);
-        }
-      };
-
-      fetchRegencies();
-    }
-  }, [formData.provinceId]);
-
-  useEffect(() => {
-    // Fetch districts when regency is selected
-    if (formData.regencyId > 0) {
-      const fetchDistricts = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) throw new Error('No authentication token found');
-          
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/regions?parentId=${formData.regencyId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
-          const data = await response.json();
-          setDistricts(data);
-          setFormData(prev => ({ ...prev, districtId: 0, villageId: 0 }));
-        } catch (err) {
-          console.error('Error fetching districts:', err);
-        }
-      };
-
-      fetchDistricts();
-    }
-  }, [formData.regencyId]);
-  
-  useEffect(() => {
-    // Fetch regencies when province is selected
-    if (formData.villageId > 0) {
-      const fetchVillage = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) throw new Error('No authentication token found');
-          
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/regions?parentId=${formData.villageId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
-          const data = await response.json();
-          setVillages(data);
-          setFormData(prev => ({ ...prev, regencyId: 0, districtId: 0, villageId: 0 }));
-        } catch (err) {
-          console.error('Error fetching regencies:', err);
-        }
-      };
-
-      fetchVillage();
-    }
-  }, [formData.villageId]);
-
-  useEffect(() => {
-    // Fetch regencies when province is selected
-    if (formData.villageId > 0) {
-      const fetchVillage = async () => {
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) throw new Error('No authentication token found');
-          
-          const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/regions?parentId=${formData.villageId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`
-              }
-            }
-          );
-          const data = await response.json();
-          setVillages(data);
-          setFormData(prev => ({ ...prev, regencyId: 0, districtId: 0, villageId: 0 }));
-        } catch (err) {
-          console.error('Error fetching regencies:', err);
-        }
-      };
-
-      fetchVillage();
-    }
-  }, [formData.villageId]);
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
     
-  // Similar useEffect for districts and villages...
+    if (!formData.nik) newErrors.nik = 'NIK is required';
+    else if (!/^\d{16}$/.test(formData.nik)) newErrors.nik = 'NIK must be 16 digits';
+    
+    if (!formData.name) newErrors.name = 'Name is required';
+    
+    if (!formData.phone) newErrors.phone = 'Phone number is required';
+    else if (!/^\d+$/.test(formData.phone)) newErrors.phone = 'Phone must contain only numbers';
+    
+    if (!formData.province) newErrors.province = 'Province is required';
+    if (!formData.regency) newErrors.regency = 'Regency is required';
+    if (!formData.district) newErrors.district = 'District is required';
+    if (!formData.village) newErrors.village = 'Village is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setSuccess(false);
+    
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
 
     try {
-      const token = localStorage.getItem('token');
-      if (!token) throw new Error('No authentication token found');
+      await registerMember({
+        nik: formData.nik,
+        name: formData.name,
+        phone: formData.phone,
+        province: formData.province,
+        regency: formData.regency,
+        district: formData.district,
+        village: formData.village
+      });
       
-      await registerMember({ token, formData });
       setSuccess(true);
-      setTimeout(() => navigate('/members'), 2000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      // Reset form after successful submission
+      setFormData({
+        nik: '',
+        name: '',
+        phone: '',
+        province: '',
+        regency: '',
+        district: '',
+        village: ''
+      });
+    } catch (error) {
+      console.error('Registration error:', error);
+      setErrors({
+        ...errors,
+        form: 'Registration failed. Please try again.'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: name.endsWith('Id') ? parseInt(value) : value
-    }));
-  };
-
   return (
-    <div className="register-container">
-      <h1>Register New Member</h1>
-      
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">Member registered successfully!</div>}
+    <div className="registration-container">
+      <h2>Member Registration</h2>
+      <form onSubmit={handleSubmit} className="registration-form">
+        {errors.form && <div className="error-message">{errors.form}</div>}
 
-      <form onSubmit={handleSubmit} className="member-form">
         <div className="form-group">
-          <label>NIK (16 digits)</label>
+          <label htmlFor="nik">NIK (16 digits)</label>
           <input
             type="text"
+            id="nik"
             name="nik"
             value={formData.nik}
             onChange={handleChange}
-            pattern="\d{16}"
-            required
+            maxLength={16}
+            placeholder="Enter 16-digit NIK"
           />
+          {errors.nik && <span className="error-text">{errors.nik}</span>}
         </div>
 
         <div className="form-group">
-          <label>Full Name</label>
+          <label htmlFor="name">Full Name</label>
           <input
             type="text"
+            id="name"
             name="name"
             value={formData.name}
             onChange={handleChange}
-            required
+            placeholder="Enter full name"
           />
+          {errors.name && <span className="error-text">{errors.name}</span>}
         </div>
 
         <div className="form-group">
-          <label>Phone Number</label>
+          <label htmlFor="phone">Phone Number</label>
           <input
             type="tel"
+            id="phone"
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            required
+            placeholder="Enter phone number"
           />
+          {errors.phone && <span className="error-text">{errors.phone}</span>}
         </div>
 
-        <div className="form-group">
-          <label>Province</label>
-          <select
-            name="provinceId"
-            value={formData.provinceId}
-            onChange={handleChange}
-            required
-          >
-            <option value={0}>Select Province</option>
-            {provinces.map(province => (
-              <option key={province.id} value={province.id}>{province.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label>Province</label>
-          <select
-            name="regencyId"
-            value={formData.regencyId}
-            onChange={handleChange}
-            required
-          >
-            <option value={0}>Select Regency</option>
-            {regencies.map(regency => (
-              <option key={regency.id} value={regency.id}>{regency.name}</option>
-            ))}
-          </select>
-        </div>    
-        <div className="form-group">
-          <label>District</label>
-          <select
-            name="districtId"
-            value={formData.districtId}
-            onChange={handleChange}
-            required
-          >
-            <option value={0}>Select District</option>
-            {regencies.map(districts => (
-              <option key={districts.id} value={districts.id}>{districts.name}</option>
-            ))}
-          </select>
-        </div>    
+        <div className="address-section">
+          <h3>Address Information</h3>
+          
+          <div className="form-group">
+            <label htmlFor="province">Province</label>
+            <input
+              type="text"
+              id="province"
+              name="province"
+              value={formData.province}
+              onChange={handleChange}
+              placeholder="Enter province"
+            />
+            {errors.province && <span className="error-text">{errors.province}</span>}
+          </div>
 
-        <div className="form-group">
-          <label>Village</label>
-          <select
-            name="villageId"
-            value={formData.villageId}
-            onChange={handleChange}
-            required
-          >
-            <option value={0}>Select Village</option>
-            {regencies.map(villages=> (
-              <option key={villages.id} value={villages.id}>{villages.name}</option>
-            ))}
-          </select>
-        </div> 
-        {/* Similar select elements for regency, district, and village */}
+          <div className="form-group">
+            <label htmlFor="regency">Regency</label>
+            <input
+              type="text"
+              id="regency"
+              name="regency"
+              value={formData.regency}
+              onChange={handleChange}
+              placeholder="Enter regency"
+            />
+            {errors.regency && <span className="error-text">{errors.regency}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="district">District</label>
+            <input
+              type="text"
+              id="district"
+              name="district"
+              value={formData.district}
+              onChange={handleChange}
+              placeholder="Enter district"
+            />
+            {errors.district && <span className="error-text">{errors.district}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="village">Village</label>
+            <input
+              type="text"
+              id="village"
+              name="village"
+              value={formData.village}
+              onChange={handleChange}
+              placeholder="Enter village"
+            />
+            {errors.village && <span className="error-text">{errors.village}</span>}
+          </div>
+        </div>
 
         <button type="submit" disabled={loading} className="submit-button">
           {loading ? 'Registering...' : 'Register Member'}
         </button>
+
+        {success && (
+          <div className="success-message">
+            Member registered successfully!
+          </div>
+        )}
       </form>
     </div>
   );
 };
+
 
 export default RegisterMember;

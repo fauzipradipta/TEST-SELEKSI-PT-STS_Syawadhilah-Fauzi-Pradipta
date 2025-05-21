@@ -5,7 +5,11 @@ import RegistrationChart from '../../component/RegistrationCard';
 import '../../styles/Dashboard.css';
 
 const Dashboard = () => {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<any>({
+    totalMembers: 0,
+    todaysRegistrations: 0,
+    chartData: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -16,8 +20,9 @@ const Dashboard = () => {
         if (!token) {
           throw new Error('No authentication token found');
         }
-        
+
         const data = await getDashboardStats(token);
+        console.log('Dashboard stats:', data); // Debugging
         setStats(data);
       } catch (err) {
         setError('Failed to load dashboard data');
@@ -57,7 +62,11 @@ const Dashboard = () => {
       
       <div className="chart-container">
         <h2>Recent Registrations</h2>
-        <RegistrationChart data={stats?.chartData} />
+        {stats?.chartData ? (
+          <RegistrationChart data={stats.chartData} />
+        ) : (
+          <div>No chart data available</div>
+        )}
       </div>
     </div>
   );

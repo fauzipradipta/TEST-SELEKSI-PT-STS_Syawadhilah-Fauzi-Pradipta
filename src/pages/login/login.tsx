@@ -19,7 +19,7 @@ const LoginForm = () => {
       const { token, user } = await login({ username, password });
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-      navigate('/dashboard');
+      navigate('/user-management');
     } catch (err) {
       setError('Invalid username or password');
       console.error('Login error:', err);

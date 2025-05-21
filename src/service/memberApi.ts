@@ -2,8 +2,19 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.API_URL;
 
-export const registerMember = async (memberData: any) => {
-  const response = await axios.post(`${API_URL}/members`, memberData);
+interface memberData {
+  nik: string;
+  name: string;
+  phone: string;
+  province: string;
+  regency: string;
+  district: string;
+  village: string;
+}
+
+
+export const registerMember = async (data: memberData) => {
+  const response = await axios.post(`${API_URL}/members`, data);
   return response.data;
 };
 
