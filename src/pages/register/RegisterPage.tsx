@@ -1,7 +1,7 @@
 import { useState,useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
+
 import { registerMember } from '../../service/memberApi';
-// import { Region } from '../../types/region'; 
+
 import '../../styles/Register.css';
 
 
@@ -70,7 +70,6 @@ const RegisterMember = () => {
       });
       
       setSuccess(true);
-      // Reset form after successful submission
       setFormData({
         nik: '',
         name: '',

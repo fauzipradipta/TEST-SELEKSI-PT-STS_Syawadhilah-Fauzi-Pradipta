@@ -1,30 +1,28 @@
 import React,{useEffect,useState} from "react";
-// import axios from "axios";
+import axios from "axios";
 import '../../styles/UserRegister.css';
-
+import { registerUser } from "../../service/api";
 
 const UserRegister = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    role: 'admin_pusat',
+    regionLevel: '',
   });
+ const [errors, setErrors] = useState<Record<string, string>>({});
+ const [loading, setLoading] = useState(false);
+ const [success, setSuccess] = useState(false);
 
-//   const [wilayahOptions, setWilayahOptions] = useState([]);
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.username) newErrors.username = 'Username is required';
+    if (!formData.password) newErrors.password = 'Password is required';
+    if (!formData.regionLevel) newErrors.regionLevel = 'Region Level is required';
 
-//   useEffect(() => {
-//     const fetchWilayah = async () => {
-//       try {
-//         const res = await fetch(`http://localhost:5000/api/domisili/${formData.role}`);
-//         const data = await res.json();
-//         setWilayahOptions(data);
-//       } catch (error) {
-//         console.error('Error fetching wilayah:', error);
-//       }
-//     };
-
-//     fetchWilayah();
-//   }, [formData.role]);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,29 +30,37 @@ const UserRegister = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        alert('User registered successfully');
-        setFormData({
+   e.preventDefault();
+       setLoading(true);
+       setSuccess(false);
+       
+       if (!validateForm()) {
+         setLoading(false);
+         return;
+       }
+   
+       try {
+         await registerUser({
+            username: formData.username,
+            password: formData.password,
+            regionLevel: formData.regionLevel,
+         });
+         
+         setSuccess(true);
+         setFormData({
           username: '',
           password: '',
-          role: 'admin_pusat',
-        });
-      } else {
-        alert(data.message || 'Registration failed');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Something went wrong.');
-    }
+          regionLevel: '',
+         });
+       } catch (error) {
+         console.error('Registration error:', error);
+         setErrors({
+           ...errors,
+           form: 'Registration failed. Please try again.'
+         });
+       } finally {
+         setLoading(false);
+       }
   };
 
   return (
@@ -81,10 +87,10 @@ const UserRegister = () => {
 
         <label>Role:</label>
           <input
-          type="role"
-          name="role"
+          type="regionLevel"
+          name="regionLevel"
           required
-          value={formData.role}
+          value={formData.regionLevel}
           onChange={handleChange}
         />
         

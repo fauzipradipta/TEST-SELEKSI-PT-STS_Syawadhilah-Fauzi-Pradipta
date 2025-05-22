@@ -12,14 +12,22 @@ interface memberData {
   village: string;
 }
 
+const api = axios.create({
+  baseURL:'http://localhost:5000/api',
+})
 
 export const registerMember = async (data: memberData) => {
-  const response = await axios.post(`${API_URL}/members`, data);
-  return response.data;
+  try {
+    const response = await api.post('/members/register', data);
+    return response.data;
+  } catch (error) {
+    console.error('Registration error:', error);
+    throw error;
+  }
 };
 
 export const getMembers = async (page = 1, limit = 5) => {
-  const response = await axios.get(`${API_URL}/members`, {
+  const response = await axios.get(`${API_URL}/api/getmembers`, {
     params: { page, limit },
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
