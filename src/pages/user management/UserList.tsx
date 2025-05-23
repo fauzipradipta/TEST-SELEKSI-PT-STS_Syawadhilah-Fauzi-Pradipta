@@ -1,6 +1,6 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import type { User, UserLevel } from '../../types/userTypes';
-
+import { getAllMembers } from '../../service/memberApi';
 
 interface UserListProps {
   users: User[];
@@ -8,40 +8,81 @@ interface UserListProps {
   onDelete: (userId: string) => void;
 }
 
-const levelLabels: Record<UserLevel, string> = {
-  'admin-pusat': 'Admin Pusat',
-  'admin-provinsi': 'Admin Provinsi',
-  'admin-kabupaten': 'Admin Kabupaten',
-  'admin-kecamatan': 'Admin Kecamatan',
-  'admin-kelurahan': 'Admin Kelurahan'
+interface Members{
+    id: string,
+    nik: string,
+    name: string,
+    phone: string,
+    province: string,
+    regency: string,
+    district: string,
+    village: string,
+    createdAt: string,
+}
+
+
+export const UserList = ({  onEdit, onDelete }: UserListProps) => {
+  const [member, setMember] = React.useState<Members[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+   useEffect(() => {
+   const fetchMembers = async () => {
+  try {
+    const data = await getAllMembers();
+    console.log(member);
+    setMember(Array.isArray(data) ? data : []);
+  } catch (err) {
+    setError('Failed to load members');
+    console.error(err);
+    setMember([]);
+  } finally {
+    setLoading(false);
+  }
 };
 
-export const UserList = ({ users, onEdit, onDelete }: UserListProps) => {
+    fetchMembers();
+    console.log(member);
+    
+  }, []);
+
+   if (loading) return <div>Loading members...</div>;
+  if (error) return <div>{error}</div>;
+
   return (
     <div className="user-list">
-      <h2>User List</h2>
+      <h2>Member List</h2>
       <table>
         <thead>
           <tr>
-            <th>Username</th>
-            <th>Level</th>
-            <th>Wilayah Kerja</th>
+            <th>No</th>
+            <th>Nik</th>
+            <th>Nama</th>
+            <th>Phone Number</th>
+            <th>Provinsi</th>
+            <th>Kabupaten</th>
+            <th>Kecamatan </th>
+            <th>Kelurahan</th>
             <th>Created At</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{levelLabels[user.level]}</td>
-              <td>{user.wilayah}</td>
-              <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+          {(Array.isArray(member)?member:[]).map((m,idx)=> (
+            <tr key={m.id}>
+              <td>{idx + 1}</td>
+              <td>{m.nik}</td>
+              <td>{m.name}</td>
+              <td>{m.phone}</td>
+              <td>{m.province}</td>
+              <td>{m.regency}</td>
+              <td> {m.district}</td>
+              <td> {m.village}</td>
+              <td>{new Date(m.createdAt).toLocaleDateString()}</td>
               <td className="actions">
-                <button onClick={() => onEdit(user)} className="edit-button">
+                <button onClick={() => onEdit(m)} className="edit-button">
                   Update
                 </button>
-                <button onClick={() => onDelete(user.id)} className="delete-button">
+                <button onClick={() => onDelete(m.id)} className="delete-button">
                   Delete
                 </button>
               </td>

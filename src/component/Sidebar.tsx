@@ -34,7 +34,7 @@ const location = useLocation()
                     to="/register"
                     className={`sidebar-link ${location.pathname === '/register' ? 'active' : ''}`}
                 >
-                    Register
+                    Register Member
                 </Link>
                 </nav>
             </aside>

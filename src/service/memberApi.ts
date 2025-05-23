@@ -36,6 +36,14 @@ export const getMembers = async (page = 1, limit = 5) => {
   return response.data;
 };
 
+export const getAllMembers = async (page=1, limit=5) => {
+  const response = await axios.get(`${API_URL}/api/get-all-members`, {
+    params: { page, limit },
+    
+  });
+  return response.data;
+}
+
 export const exportMembers = async () => {
   const response = await axios.get(`${API_URL}/members/export`, {
     responseType: 'blob',
